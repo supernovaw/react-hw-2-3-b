@@ -36,17 +36,29 @@ function Video(props) {
   )
 };
 
+const viewsDependentCreator = (Cmp) => (
+  (props) => {
+    let Wrapper = React.Fragment;
+    if (props.views < 100) Wrapper = New;
+    else if (props.views > 1000) Wrapper = Popular;
+    return <Wrapper><Cmp {...props} /></Wrapper>
+  }
+);
+
+const ArticleViewsDependent = viewsDependentCreator(Article);
+const VideoViewsDependent = viewsDependentCreator(Video);
+
 function List(props) {
   return props.list.map(item => {
     switch (item.type) {
       case 'video':
         return (
-          <Video {...item} />
+          <VideoViewsDependent {...item} />
         );
 
       case 'article':
         return (
-          <Article {...item} />
+          <ArticleViewsDependent {...item} />
         );
     }
   });
